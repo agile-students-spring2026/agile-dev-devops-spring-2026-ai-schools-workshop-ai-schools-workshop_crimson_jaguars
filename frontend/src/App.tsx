@@ -7,6 +7,8 @@ import {
 } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import { ResultsPage } from "./pages/ResultsPage";
+import { ComparePage } from "./pages/ComparePage";
+import { mockDistricts } from "./data/mockDistricts";
 import type { Audience, PresetKey, ScoredDistrict } from "./lib/types";
 
 const VALID_AUDIENCES: Audience[] = ["parent", "educator"];
@@ -52,8 +54,29 @@ function ResultsRoute() {
   );
 }
 
-function ComparePlaceholder() {
-  return <div style={{ padding: "2rem" }}>Compare page goes here.</div>;
+function CompareRoute() {
+  const [params] = useSearchParams();
+  const navigate = useNavigate();
+
+  const a = params.get("a");
+  const b = params.get("b");
+
+  if (!a || !b) return <div className="p-8">Invalid comparison</div>;
+
+  // Find the districts by ID
+  const districtA = mockDistricts.find(d => d.id === a);
+  const districtB = mockDistricts.find(d => d.id === b);
+
+  if (!districtA || !districtB) {
+    return <div className="p-8">Districts not found</div>;
+  }
+
+  return (
+    <ComparePage
+      districts={[districtA, districtB]}
+      onBack={() => navigate("/")}
+    />
+  );
 }
 
 export default function App() {
@@ -62,7 +85,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/results" element={<ResultsRoute />} />
-        <Route path="/compare" element={<ComparePlaceholder />} />
+        <Route path="/compare" element={<CompareRoute />} />
       </Routes>
     </BrowserRouter>
   );
