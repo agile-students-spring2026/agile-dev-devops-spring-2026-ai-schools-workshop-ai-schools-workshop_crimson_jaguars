@@ -71,3 +71,23 @@ export default defineConfig([
   },
 ])
 ```
+
+## Local development
+
+This repository contains the app source inside the `frontend/` directory.
+
+To start the app locally:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+To run the test suite:
+
+```bash
+cd frontend
+npm test
+```
+
